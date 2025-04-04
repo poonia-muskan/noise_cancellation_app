@@ -1,0 +1,7 @@
+Flask
+librosa
+noisereduce
+soundfile
+pydub
+ffmpeg
+gunicorn

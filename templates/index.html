@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Background Noise cancellation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔊 ClariFi 🎧</h1>
+        <input type="file" id="fileInput" accept="audio/*">
+        <button id="uploadBtn">Upload & Process</button>
+
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>Processing...✨</p>
+        </div>
+
+        <audio id="audioPlayer" controls class="hidden"></audio>
+        <a id="downloadBtn" class="hidden" download>Download Cleaned Audio 😌</a>
+    </div>
+</body>
+</html>
