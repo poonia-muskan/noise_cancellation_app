@@ -24,7 +24,7 @@
 
 ## How to Run Locally
 ```bash
-git clone https://github.com/poonia-muskan/clarifi.git
-cd clarifi
+git clone https://github.com/poonia-muskan/noise_cancellation_app.git
+cd noise_cancellation_app
 pip install -r requirements.txt
 python app.py
