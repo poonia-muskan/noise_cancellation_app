@@ -7,8 +7,7 @@
 - Upload audio or video files
 - Removes background noise automatically
 - Download cleaned version
-- Deployed on [Railway](https://web-production-6aaa7.up.railway.app)
-
+- Deployed on Render
 ## Tech Stack
 - **Backend**: Python, Flask
 - **Noise Reduction**: `noisereduce` library
@@ -20,7 +19,7 @@
 
 
 ## Live Demo
-[ClariFi on Railway](https://web-production-6aaa7.up.railway.app)
+[ClariFi on Railway](https://noise-cancellation-app.onrender.com)
 
 ## How to Run Locally
 ```bash
