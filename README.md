@@ -12,14 +12,14 @@
 - **Backend**: Python, Flask
 - **Noise Reduction**: `noisereduce` library
 - **Frontend**: HTML, CSS, JavaScript
-- **Deployment**: Railway
+- **Deployment**: Render
 
 ## Screenshots
 ![image](https://github.com/user-attachments/assets/855cb795-6ccc-4cb1-b4de-80d0f98938c5)
 
 
 ## Live Demo
-[ClariFi on Railway](https://noise-cancellation-app.onrender.com)
+[ClariFi on Render](https://noise-cancellation-app.onrender.com)
 
 ## How to Run Locally
 ```bash
