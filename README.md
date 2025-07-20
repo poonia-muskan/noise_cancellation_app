@@ -22,7 +22,7 @@
 ### Live Demo
 [ClariFi on Render](https://noise-cancellation-app.onrender.com)
 
-###Run Locally
+### Run Locally
 ```bash
 git clone https://github.com/poonia-muskan/noise_cancellation_app.git
 cd noise_cancellation_app
