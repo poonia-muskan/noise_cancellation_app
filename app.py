@@ -1,17 +1,18 @@
-from flask import Flask, render_template, request, send_from_directory
 import os
-import librosa
-import noisereduce as nr
+os.environ["NUMBA_DISABLE_JIT"] = "1"   # FIX librosa crash
+
+from flask import Flask, render_template, request, send_from_directory
 import soundfile as sf
+import noisereduce as nr
 from pydub import AudioSegment
+from pydub.utils import which
+
+AudioSegment.converter = which("ffmpeg")  # Ensure ffmpeg works on Render
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 PROCESSED_FOLDER = 'processed'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
 
-# Ensure folders exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
@@ -21,10 +22,8 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
-        return "No file uploaded", 400
-    file = request.files['file']
-    if file.filename == '':
+    file = request.files.get('file')
+    if not file or file.filename == "":
         return "No file selected", 400
 
     filename = file.filename
@@ -32,24 +31,27 @@ def upload_file():
     file.save(upload_path)
 
     try:
-        y, sr = librosa.load(upload_path, sr=None)
+        # USE SOUND-FILE INSTEAD OF LIBROSA
+        y, sr = sf.read(upload_path)
+
         reduced_noise = nr.reduce_noise(y=y, sr=sr)
+
         temp_wav = os.path.join(PROCESSED_FOLDER, "temp_cleaned.wav")
         sf.write(temp_wav, reduced_noise, sr)
 
-        cleaned_mp3 = os.path.join(PROCESSED_FOLDER, "cleaned_" + os.path.splitext(filename)[0] + ".mp3")
+        cleaned_mp3 = os.path.join(
+            PROCESSED_FOLDER,
+            f"cleaned_{os.path.splitext(filename)[0]}.mp3"
+        )
+
         AudioSegment.from_wav(temp_wav).export(cleaned_mp3, format="mp3")
         os.remove(temp_wav)
 
         return f"/processed/{os.path.basename(cleaned_mp3)}"
+
     except Exception as e:
-        return f"Error processing file: {str(e)}", 500
+        return f"Error: {str(e)}", 500
 
 @app.route('/processed/<filename>')
 def processed_file(filename):
-    return send_from_directory(PROCESSED_FOLDER, filename, as_attachment=False)
-
-if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+    return send_from_directory(PROCESSED_FOLDER, filename)
