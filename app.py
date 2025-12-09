@@ -1,5 +1,5 @@
 import os
-os.environ["NUMBA_DISABLE_JIT"] = "1"   # FIX librosa crash
+os.environ["NUMBA_DISABLE_JIT"] = "1"   
 
 from flask import Flask, render_template, request, send_from_directory
 import soundfile as sf
@@ -7,7 +7,7 @@ import noisereduce as nr
 from pydub import AudioSegment
 from pydub.utils import which
 
-AudioSegment.converter = which("ffmpeg")  # Ensure ffmpeg works on Render
+AudioSegment.converter = which("ffmpeg")  
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -31,7 +31,6 @@ def upload_file():
     file.save(upload_path)
 
     try:
-        # USE SOUND-FILE INSTEAD OF LIBROSA
         y, sr = sf.read(upload_path)
 
         reduced_noise = nr.reduce_noise(y=y, sr=sr)
@@ -55,3 +54,4 @@ def upload_file():
 @app.route('/processed/<filename>')
 def processed_file(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
+
