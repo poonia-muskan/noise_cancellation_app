@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClariFi – Background Noise Cancellation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">🎵</span>
+        Clari<span class="logo-accent">Fi</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#upload">Try it</a></li>
+        <li><a href="#features">Features</a></li>
+      </ul>
+      <a href="#upload" class="btn btn-nav">Clean Audio ✨</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Noise Reduction
+      </div>
+
+      <h1 class="hero-title">
+        Make your audio<br>
+        sound <em>amazing.</em>
+      </h1>
+
+      <p class="hero-subtitle">
+        Remove hiss, hum, wind, and background noise from audio and video files while preserving your content.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#upload" class="btn btn-primary">Upload a file →</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+
+      <div class="soundbar-row" id="heroSoundbars" aria-hidden="true"></div>
+
+      <div class="hero-image-card">
+        <img src="/static/images/noise-reduce.gif" alt="ClariFi in action" />
+      </div>
+    </div>
+  </header>
+
+  <section class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-lbl">Free to use</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">13+</span>
+        <span class="stat-lbl">File formats</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">⚡</span>
+        <span class="stat-lbl">Instant results</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">🔒</span>
+        <span class="stat-lbl">Files auto-deleted</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section how-section" id="how">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip chip-pink">Process</span>
+        <h2 class="section-title">Three steps to <em>clean audio</em></h2>
+        <p class="section-sub">No account, no software, no stress.</p>
+      </div>
+
+      <div class="steps-row">
+        <div class="step-card step-card--yellow">
+          <div class="step-num">01</div>
+          <div class="step-icon-wrap">📂</div>
+          <h3>Upload</h3>
+          <p>Drop any audio or video file. MP3, WAV, MP4, AVI, MOV and more — up to 100 MB.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card step-card--pink">
+          <div class="step-num">02</div>
+          <div class="step-icon-wrap">🔬</div>
+          <h3>ClariFi Cleans</h3>
+          <p>Our <code>noisereduce</code> engine strips background hiss, hum, and ambient interference.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card step-card--mint">
+          <div class="step-num">03</div>
+          <div class="step-icon-wrap">⬇️</div>
+          <h3>Download</h3>
+          <p>Get your noise-free file instantly. Same content, crystal-clear quality.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section upload-section" id="upload">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip chip-blue">Start Now</span>
+        <h2 class="section-title">Clean your audio</h2>
+        <p class="section-sub">Upload your file and let ClariFi do the work.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash--{{ category }}" role="alert">
+              <span class="flash-icon">{{ '❌' if category == 'error' else '✅' }}</span>
+              <span>{{ message }}</span>
+              <button class="flash-close" aria-label="Dismiss">✕</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if download_filename %}
+      <div class="result-card" id="resultCard">
+        <div class="result-confetti" aria-hidden="true" id="confettiArea"></div>
+        <div class="result-icon">🎉</div>
+        <h3 class="result-title">Noise removed!</h3>
+        <p class="result-note">Output: {{ download_filename }}</p>
+        <p class="result-sub">Your clean audio is ready. Link expires in 10 minutes.</p>
+        {% if download_filename.endswith('.mp3') %}
+        <audio controls style="width:100%; margin-bottom:1rem;">
+        <source src="{{ url_for('preview_file', filename=download_filename) }}">
+        </audio>
+        {% endif %}
+        <a href="{{ url_for('processed_file', filename=download_filename) }}" class="btn btn-download">
+          Download Clean File
+        </a>
+        <p class="result-note">{{ download_filename }}</p>
+      </div>
+      {% endif %}
+
+      <div class="upload-card" id="uploadCard">
+        <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm" novalidate>
+
+          <div class="drop-zone" id="dropZone" tabindex="0" role="button"
+               aria-label="Click or drag and drop to upload a file">
+            <input type="file" name="file" id="fileInput"
+                   accept="audio/*,video/*" aria-label="Choose audio or video file" />
+            <div class="drop-icon-wrap" id="dropIconWrap">
+              <span class="drop-icon">🎵</span>
+            </div>
+            <p class="drop-title">Drop your file here</p>
+            <p class="drop-sub">or <strong>click to browse</strong></p>
+            <div class="file-tags" aria-label="Supported formats">
+              <span class="ftag">MP3</span><span class="ftag">WAV</span>
+              <span class="ftag">MP4</span><span class="ftag">AVI</span>
+              <span class="ftag">MOV</span><span class="ftag">OGG</span>
+              <span class="ftag">FLAC</span><span class="ftag">MKV</span>
+            </div>
+          </div>
+
+          <div class="file-preview hidden" id="filePreview" role="region" aria-label="Selected file">
+            <span class="fp-icon" id="fpIcon">🎵</span>
+            <div class="fp-meta">
+              <span class="fp-name" id="fpName">filename.mp3</span>
+              <span class="fp-size" id="fpSize">0 KB</span>
+            </div>
+            <button type="button" class="fp-remove" id="fpRemove" aria-label="Remove file">✕</button>
+          </div>
+
+          <button type="submit" class="btn btn-submit" id="submitBtn" disabled aria-label="Remove noise from file">
+            <span id="btnLabel">Remove Noise</span>
+          </button>
+
+          <div class="progress-area hidden" id="progressArea" aria-live="polite">
+            <div class="prog-header">
+              <span id="progStatusText">Uploading…</span>
+              <span id="progPct" class="prog-pct">0%</span>
+            </div>
+            <div class="prog-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="prog-fill" id="progFill"></div>
+            </div>
+            <div class="proc-steps" id="procSteps">
+              <div class="proc-step" id="ps1" data-label="Uploading file">📤 Uploading file</div>
+              <div class="proc-step" id="ps2" data-label="Analyzing audio">🔍 Analyzing audio</div>
+              <div class="proc-step" id="ps3" data-label="Reducing noise">⚙️ Reducing noise</div>
+              <div class="proc-step" id="ps4" data-label="Finalizing output">✨ Finalizing output</div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section ba-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip chip-purple">Results</span>
+        <h2 class="section-title">Hear the difference</h2>
+        <p class="section-sub">ClariFi preserves what matters and removes what doesn't.</p>
+      </div>
+
+      <div class="ba-grid">
+        <div class="ba-card ba-card--before">
+          <div class="ba-label bad">🔴 Before</div>
+          <div class="ba-wave" id="beforeWave" aria-label="Noisy audio waveform"></div>
+          <p>Noisy recording — background hum, wind noise, and static muddying your audio.</p>
+        </div>
+        <div class="ba-vs">VS</div>
+        <div class="ba-card ba-card--after">
+          <div class="ba-label good">🟢 After ClariFi</div>
+          <div class="ba-wave" id="afterWave" aria-label="Clean audio waveform"></div>
+          <p>Crystal-clear output — voice and content preserved, all background noise removed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section showcase-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip chip-orange">Gallery</span>
+        <h2 class="section-title">Built for creators</h2>
+      </div>
+
+      <div class="showcase-grid">
+        <div class="showcase-img showcase-img--wide">
+          <img src="/static/images/recorder.jpg" alt="recording" />
+        </div>
+        <div class="showcase-img">
+          <img src="/static/images/usecase.jpg" alt="content creation" />
+        </div>
+        <div class="showcase-img">
+          <img src="/static/images/podcast.jpg" alt="podcast" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-chip chip-mint">Why ClariFi</span>
+        <h2 class="section-title">Everything you need</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feat-card feat-card--a">
+          <div class="feat-icon">🎯</div>
+          <h3>Precision Noise Profiling</h3>
+          <p>Smart analysis removes noise without affecting the audio you actually want to keep.</p>
+        </div>
+        <div class="feat-card feat-card--b">
+          <div class="feat-icon">🎬</div>
+          <h3>Audio & Video</h3>
+          <p>Works on both audio-only files and video files — cleans the track, keeps the footage.</p>
+        </div>
+        <div class="feat-card feat-card--c">
+          <div class="feat-icon">⚡</div>
+          <h3>Fast Processing</h3>
+          <p>Powered by Python's <code>noisereduce</code> — optimized for speed without losing quality.</p>
+        </div>
+        <div class="feat-card feat-card--d">
+          <div class="feat-icon">🔒</div>
+          <h3>Auto-Deleted Files</h3>
+          <p>Uploads and outputs are automatically removed after 10 minutes. Your content stays private.</p>
+        </div>
+        <div class="feat-card feat-card--e">
+          <div class="feat-icon">📁</div>
+          <h3>13+ Formats</h3>
+          <p>Accepts MP3, WAV, OGG, FLAC, MP4, AVI, MOV, MKV. Always outputs a clean MP3.</p>
+        </div>
+        <div class="feat-card feat-card--f">
+          <div class="feat-icon">🌐</div>
+          <h3>No Install Needed</h3>
+          <p>Works entirely in your browser. No app, no sign-up — just upload and download.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-icon">🎵</span>
+        Clari<span class="logo-accent">Fi</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#how">How it works</a>
+        <a href="#upload">Upload</a>
+        <a href="#features">Features</a>
+      </nav>
+      <p class="footer-copy">© 2025 ClariFi · Built with Flask &amp; noisereduce</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
