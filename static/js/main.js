@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getFileIcon(name) {
-    return VIDEO_EXTS.has(getExt(name)) ? '🎬' : '🎵';
+    return VIDEO_EXTS.has(getExt(name)) ? '▣' : '♪';
   }
 
   function showClientError(msg) {
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
     dropZone.style.borderStyle = 'dashed';
     if (dropIconWrap) {
-      dropIconWrap.innerHTML = '🎵';
+      dropIconWrap.innerHTML = '♪';
       dropIconWrap.style.fontSize = '2rem';
     }
   }
