@@ -190,10 +190,10 @@ ClariFi/
 
 ## Screenshots
 
-<img width="1919" height="909" alt="image" src="https://github.com/user-attachments/assets/6ae45132-eb8c-48cd-b2f1-6f148e86371b" />
-<img width="1891" height="904" alt="image" src="https://github.com/user-attachments/assets/332f409e-8237-42f2-8163-3381d9c66554" />
-<img width="1896" height="910" alt="image" src="https://github.com/user-attachments/assets/fe2c6fdc-df38-489a-9817-f1aeb0b8cbec" />
-<img width="1894" height="907" alt="image" src="https://github.com/user-attachments/assets/3462ab34-e52f-4b02-bcb0-637481be3fd4" />
+<img width="1904" height="910" alt="image" src="https://github.com/user-attachments/assets/90ae4e5a-b2fd-4e92-bdf9-d0e4f67be27a" />
+<img width="1900" height="909" alt="image" src="https://github.com/user-attachments/assets/2164bea1-180f-46b8-9e19-daacbd9c102d" />
+<img width="1896" height="905" alt="image" src="https://github.com/user-attachments/assets/e0b9bdd2-7998-425f-a717-2f78a02291e4" />
+<img width="1898" height="912" alt="image" src="https://github.com/user-attachments/assets/b4ca073c-e7fd-4ee2-8467-312d67491bca" />
 
 ---
 
