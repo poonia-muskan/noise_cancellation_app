@@ -188,7 +188,7 @@ def upload_file():
         if temp_wav:
             schedule_cleanup(600, temp_wav)
 
-        return render_template("index.html", download_filename=output_filename)
+        return render_template("index.html", download_filename=output_filename, scroll_to_result=True)
 
     except sf.LibsndfileError as e:
         logger.error("soundfile error: %s", e)
